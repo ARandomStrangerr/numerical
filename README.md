@@ -45,3 +45,7 @@ $$
 1 & 3 & 9 & | & 1
 \end{matrix}
 $$
+
+For this case, there is nothing much to debate to talk about.
+
+The real one that we need to notice is when there is a 0 on the diagonal
