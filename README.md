@@ -50,4 +50,6 @@ For this case, there is nothing much to debate to talk about.
 
 The real one that we need to notice is when there is a 0 on the diagonal.
 
-to use the above algorim for GE, we must have diagonal coef $\not=$ 0; therefore, if any paricular diagonal coef = 0, we swap it to the bottom. however, swapping 2 rows cost O(n) operations. We could use a trick to swap 2 rows by having an index array to track which rows is what. It makes O(n) operation into O(1).
+To use the above algorim for GE, we must have diagonal coef $\not=$ 0; therefore, if any paricular diagonal coef = 0, we swap it to the bottom. however, swapping 2 rows cost O(n) operations. We could use a trick to swap 2 rows by having an index array to track which rows is what. It makes O(n) operation into O(1).
+
+The thing we need to know about this that the execution of RRE is $O(n^3)$ and backward subsitution is $O(n^2)$
