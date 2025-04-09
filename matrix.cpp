@@ -52,6 +52,48 @@ matrix solveMatrix::gaussElimination(const matrix& lhsOrigin, const matrix& rhsO
 	return rhs;
 }
 
+matrix solveMatrix::luDecomposition(const matrix& lhsOrigin, const matrix& rhsOrigin){
+	// catching error:
+	if (lhsOrigin.height != lhsOrigin.width) throw std::runtime_error("left hand side matrix is not square");
+	if (lhsOrigin.height != rhsOrigin.height) throw std::runtime_error("left hand side rows and right hand side rows are different");
+	if (rhsOrigin.width != 1) throw std::runtime_error("right hand side has more than 1 column");
+	// copy the matrix to perform arithmatic
+	matrix rhs(rhsOrigin);
+	matrix lhs(lhsOrigin);
+	// perform arithmatic to split matrix A = LU
+	for (int diagonal = 0; diagonal < lhs.height - 1; diagonal++){
+		for (int row = diagonal + 1; row < lhs.height; row++){
+			double lowerMatrixCoef = lhs.get(row,diagonal) / lhs.get(diagonal, diagonal);
+			lhs.set(row, diagonal, lowerMatrixCoef);
+			for (int col = diagonal + 1; col < lhs.width; col++){
+				double newCoef = - lhs.get(diagonal, col) * lowerMatrixCoef + lhs.get(row, col);
+				lhs.set(row, col, newCoef);
+			}
+			
+//			cout << lhs << std::endl;
+//			double newCoef = rhs.get(diagonal, 0) * lowerMatrixCoef + rhs.get(row, 0);
+//			rhs.set(row,0, newCoef);
+		}
+	}
+	// perform forward subsitution
+	for (int row = 1; row < lhs.height; row++){
+		for (int col = 0; col < row; col++){
+			double newCoef = rhs.get(row, 0) - lhs.get(row, col) * rhs.get(col, 0);
+			rhs.set(row, 0, newCoef);
+		}
+	}
+	// perform backward subsitution
+	for (int row = lhs.height-1; row >= 0; row--){
+		for (int col = lhs.width-1; col > row; col--) {
+			double newCoef = rhs.get(row, 0) - rhs.get(col, 0) * lhs.get(row, col);
+			rhs.set(row, 0, newCoef);
+		}
+		double newCoef = rhs.get(row, 0) / lhs.get(row, row);
+		rhs.set(row, 0, newCoef);
+	}
+	return rhs;
+}
+
 matrix::matrix(int row, int col): height(row), width(col) {
 	this->arr = new double[row * col];
 }

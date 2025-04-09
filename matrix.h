@@ -15,27 +15,28 @@ namespace solveMatrix {
 	/**
 	 * solving matrix using Gaussian Elimination
 	 * @params:
-	 * 	const matrix* - left hand side
-	 * 	const matrix* - right hand side
+	 * 	const matrix& - left hand side
+	 * 	const matrix& - right hand side
 	 * @return:
-	 * 	matrix* - x in Ax=b
+	 * 	matrix - x in Ax=b
 	 */
 	matrix gaussElimination(const matrix&, const matrix&);
 	/**
 	 * solving matrix using LU Decompostion
 	 * @params:
-	 * 	const matrix* - left hand side
-	 * 	const maitrx* - right hand side
+	 * 	const matrix& - left hand side
+	 * 	const maitrx& - right hand side
 	 * @return:
-	 * 	matrix* - x in Ax=b
+	 * 	matrix - x in Ax=b
 	 */
-	matrix* luDecom(const matrix*, const matrix*);
+	matrix luDecomposition(const matrix&, const matrix&);
 }
 
 
 
 class matrix{
 	friend matrix solveMatrix::gaussElimination(const matrix &, const matrix &);
+	friend matrix solveMatrix::luDecomposition(const matrix &, const matrix &);
 	private:
 		int width;
 		int height;
