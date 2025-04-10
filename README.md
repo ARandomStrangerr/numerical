@@ -121,3 +121,5 @@ At first glance, we see that Split A = LU takes $O(n^3)$ and backward + forward 
 The coest of splitting is already as expensive as whole GE.
 
 The saving grace comes from when we solving the same matrix A but with different b. This is when we get our avantages. we split it once taking $O(n^3)$ and consistently solving the matrix taking $O(n^2)$. Think of it as invest once, return later.
+
+If you read any book, it will say something along the line: if we have diagonal entry to be 0, multiply both side with a **permutation matrix**. A permutation matrix when multiply with it, the orignal matrix swap its rows. So, it is just a swap rows operation.
