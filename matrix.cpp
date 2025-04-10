@@ -1,5 +1,6 @@
 #include "matrix.h"
 #include <cstdlib>
+#include <utility>
 
 using namespace std;
 
@@ -13,9 +14,7 @@ matrix solveMatrix::gaussElimination(const matrix& lhsOrigin, const matrix& rhsO
 	matrix rhs(rhsOrigin);
 	// the index of rows will purely be followed this array
 	int rowIndex[lhs.height];
-	for(int i = 0; i < rhs.height; i++) {
-		rowIndex[i] = i;
-	}
+	for(int i = 0; i < rhs.height; i++) rowIndex[i] = i;
 	// perform arithmatic on the copy
 	for	(int diagonal = 0; diagonal < lhs.height - 1; diagonal++){
 		// case when the diagonal is 0
@@ -60,36 +59,46 @@ matrix solveMatrix::luDecomposition(const matrix& lhsOrigin, const matrix& rhsOr
 	// copy the matrix to perform arithmatic
 	matrix rhs(rhsOrigin);
 	matrix lhs(lhsOrigin);
+	// the index of rows will purely be followed this array
+	int rowIndex[lhs.height];
+	for(int i = 0; i < rhs.height; i++) rowIndex[i] = i;
 	// perform arithmatic to split matrix A = LU
 	for (int diagonal = 0; diagonal < lhs.height - 1; diagonal++){
-		for (int row = diagonal + 1; row < lhs.height; row++){
-			double lowerMatrixCoef = lhs.get(row,diagonal) / lhs.get(diagonal, diagonal);
-			lhs.set(row, diagonal, lowerMatrixCoef);
-			for (int col = diagonal + 1; col < lhs.width; col++){
-				double newCoef = - lhs.get(diagonal, col) * lowerMatrixCoef + lhs.get(row, col);
-				lhs.set(row, col, newCoef);
+		if (std::abs(lhs.get(diagonal, diagonal)) < EPS){
+			bool swapped = false;
+			for (int i = lhs.height - 1; i > diagonal; i--){
+				if(std::abs(lhs.get(rowIndex[i], diagonal)) > EPS) {
+					std::swap(rowIndex[i], rowIndex[diagonal]);
+					swapped = true;
+					break;
+				}
 			}
-			
-//			cout << lhs << std::endl;
-//			double newCoef = rhs.get(diagonal, 0) * lowerMatrixCoef + rhs.get(row, 0);
-//			rhs.set(row,0, newCoef);
+			if (!swapped) throw std::runtime_error("0 diagonal matrix");
+		}
+		for (int row = diagonal + 1; row < lhs.height; row++){
+			double lowerMatrixCoef = lhs.get(rowIndex[row],diagonal) / lhs.get(rowIndex[diagonal], diagonal);
+			lhs.set(rowIndex[row], diagonal, lowerMatrixCoef);
+			for (int col = diagonal + 1; col < lhs.width; col++){
+				double newCoef = - lhs.get(rowIndex[diagonal], col) * lowerMatrixCoef + lhs.get(rowIndex[row], col);
+				lhs.set(rowIndex[row], col, newCoef);
+			}
 		}
 	}
 	// perform forward subsitution
 	for (int row = 1; row < lhs.height; row++){
 		for (int col = 0; col < row; col++){
-			double newCoef = rhs.get(row, 0) - lhs.get(row, col) * rhs.get(col, 0);
-			rhs.set(row, 0, newCoef);
+			double newCoef = rhs.get(rowIndex[row], 0) - lhs.get(rowIndex[row], col) * rhs.get(rowIndex[col], 0);
+			rhs.set(rowIndex[row], 0, newCoef);
 		}
 	}
 	// perform backward subsitution
 	for (int row = lhs.height-1; row >= 0; row--){
 		for (int col = lhs.width-1; col > row; col--) {
-			double newCoef = rhs.get(row, 0) - rhs.get(col, 0) * lhs.get(row, col);
-			rhs.set(row, 0, newCoef);
+			double newCoef = rhs.get(rowIndex[row], 0) - rhs.get(rowIndex[col], 0) * lhs.get(rowIndex[row], col);
+			rhs.set(rowIndex[row], 0, newCoef);
 		}
-		double newCoef = rhs.get(row, 0) / lhs.get(row, row);
-		rhs.set(row, 0, newCoef);
+		double newCoef = rhs.get(rowIndex[row], 0) / lhs.get(rowIndex[row], row);
+		rhs.set(rowIndex[row], 0, newCoef);
 	}
 	return rhs;
 }
