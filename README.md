@@ -123,3 +123,42 @@ The coest of splitting is already as expensive as whole GE.
 The saving grace comes from when we solving the same matrix A but with different b. This is when we get our avantages. we split it once taking $O(n^3)$ and consistently solving the matrix taking $O(n^2)$. Think of it as invest once, return later.
 
 If you read any book, it will say something along the line: if we have diagonal entry to be 0, multiply both side with a **permutation matrix**. A permutation matrix when multiply with it, the orignal matrix swap its rows. So, it is just a swap rows operation.
+
+# Iterative method
+
+In numerical computing, "iterative method" meaning that we do not solve for solution explicitly, but instread using previous iteration(s) to produce result of the next iteration.
+
+But then you would beg the question: "but hey, I follow this stranger, will I ended up somewhere? or will I ended up aimlessly wandering in the fog of lost soul?" - Avatar if you get me 😬.
+
+Therefore, the question about **Convergence** is utmost important in iterative method setting.
+
+First, let's look at an example:
+
+$$
+\begin{cases}
+4x − y + z = 7\\
+4x − 8y + z = −21\\
+−2x + y + 5z = 15
+\end{cases}
+$$
+
+what we do is to re-write in $(x,y,z)$:
+
+$$
+\begin{cases}
+x = \frac{7 + y - z}{4}\\
+y = \frac{−21 + 4x + z}{8}\\
+z = \frac{15 + 2x - y}{5}
+\end{cases}
+$$
+
+And the format of of iterative method is going to be:
+
+$$
+\begin{cases}
+x_i = \frac{7 + y_{i-1} - z_{i-1}}{4}\\
+y_i = \frac{−21 + 4x_{i-1} + z_{i-1}}{8}\\
+z_i = \frac{15 + 2x_{i-1} - y_{i-1}}{5}
+\end{cases}
+$$
+
