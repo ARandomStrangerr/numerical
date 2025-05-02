@@ -162,3 +162,6 @@ z_i = \frac{15 + 2x_{i-1} - y_{i-1}}{5}
 \end{cases}
 $$
 
+well at this part, you might wonder, so what is the value for $(x_0, y_0, z_0)$?
+
+fun part, you have to guess, and this guess also has affect on the convergence of the system.
